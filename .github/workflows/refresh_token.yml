@@ -1,0 +1,20 @@
+name: アクセストークンの延長
+
+on:
+  schedule:
+    - cron: "0 0 1,15 * *"     # 毎月1日と15日（日本時間 9:00）
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: トークンを延長する
+        env:
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_PAT }}
+        run: python scripts/refresh_token.py
